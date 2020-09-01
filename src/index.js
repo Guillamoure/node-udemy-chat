@@ -13,8 +13,17 @@ app.use(express.static(publicDirectoryPath))
 
 const port = process.env.PORT || 3000
 
-io.on('connection', () => {
+let count = 0
+
+io.on('connection', (socket) => {
 	console.log("New Websocket Connection")
+
+	socket.emit('countUpdated', count)
+	socket.on('increment', () => {
+		count++
+		// socket.emit('countUpdated', count)
+		io.emit('countUpdated', count)
+	})
 })
 
 server.listen(port, () => {
