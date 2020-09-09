@@ -17,8 +17,14 @@ io.on('connection', (socket) => {
 	console.log("New Websocket Connection")
 
 	socket.emit('message', "Welcome to ChatVille")
+	socket.broadcast.emit('message', 'A new user has joined!')
+
 	socket.on('sendMessage', (data) => {
 		io.emit('message', data)
+	})
+
+	socket.on('disconnect', () => {
+		io.emit('message', 'A user has left!')
 	})
 })
 
