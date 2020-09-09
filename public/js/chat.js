@@ -10,7 +10,10 @@ form.addEventListener('submit', e => {
 	e.preventDefault()
 
 	let text = form.message.value
-	socket.emit("sendMessage", text)
+	socket.emit("sendMessage", text, (error) => {
+		if (error){return console.log(error)}
+		console.log("The message was delivered!")
+	})
 })
 
 let locationBtn = document.getElementById("send-location")
@@ -23,6 +26,8 @@ locationBtn.addEventListener("click", () => {
 		socket.emit("sendLocation", {
 			latitude: position.coords.latitude,
 			longitude: position.coords.longitude
+		}, (confirmation) => {
+			console.log(confirmation)
 		})
 	})
 })
