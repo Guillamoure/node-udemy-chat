@@ -18,8 +18,12 @@ app.use(express.static(publicDirectoryPath))
 io.on('connection', (socket) => {
 	console.log("New Websocket Connection")
 
-	socket.emit('message', generateMessage("Welcome to ChatVille!"))
-	socket.broadcast.emit('message', generateMessage('A new user has joined!'))
+	socket.on('join', ({ username, room }) => {
+		socket.join(room)
+
+		socket.emit('message', generateMessage("Welcome to ChatVille!"))
+		socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined!`))
+	})
 
 	socket.on('sendMessage', (data, callback) => {
 		const filter = new Filter()
@@ -28,7 +32,7 @@ io.on('connection', (socket) => {
 			return callback("Profanity is not allowed")
 		}
 
-		io.emit('message', generateMessage(data))
+		io.to('Center City').emit('message', generateMessage(data))
 		callback()
 	})
 
