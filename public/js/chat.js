@@ -8,11 +8,20 @@ const messages = document.getElementById("messages")
 
 // Templates
 const messageTemplate = document.getElementById("message-template").innerHTML
+const locationMessageTemplate = document.getElementById("location-message-template").innerHTML
 
 socket.on('message', (data) => {
 	console.log(data)
 	const html = Mustache.render(messageTemplate, {
 		message: data
+	})
+	messages.insertAdjacentHTML('beforeend', html)
+})
+
+socket.on('locationMessage', (url) => {
+	console.log(url)
+	const html = Mustache.render(locationMessageTemplate, {
+		url
 	})
 	messages.insertAdjacentHTML('beforeend', html)
 })
