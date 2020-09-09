@@ -4,9 +4,17 @@ let form = document.getElementById("form")
 let formInput = form.querySelector("input")
 let formBtn = form.querySelector("button")
 let locationBtn = document.getElementById("send-location")
+const messages = document.getElementById("messages")
+
+// Templates
+const messageTemplate = document.getElementById("message-template").innerHTML
 
 socket.on('message', (data) => {
 	console.log(data)
+	const html = Mustache.render(messageTemplate, {
+		message: data
+	})
+	messages.insertAdjacentHTML('beforeend', html)
 })
 
 
@@ -42,7 +50,7 @@ locationBtn.addEventListener("click", () => {
 		}, (confirmation) => {
 
 			locationBtn.removeAttribute('disabled')
-			
+
 			console.log(confirmation)
 		})
 	})
