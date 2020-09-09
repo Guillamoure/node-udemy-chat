@@ -13,7 +13,8 @@ const locationMessageTemplate = document.getElementById("location-message-templa
 socket.on('message', (data) => {
 	console.log(data)
 	const html = Mustache.render(messageTemplate, {
-		message: data
+		message: data.text,
+		createdAt: moment(data.createdAt).format('h:mm a')
 	})
 	messages.insertAdjacentHTML('beforeend', html)
 })
