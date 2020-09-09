@@ -7,22 +7,18 @@ const app = express()
 const server = http.createServer(app)
 const io = socketio(server)
 
+const port = process.env.PORT || 3000
 const publicDirectoryPath = path.join(__dirname, '../public')
 
 app.use(express.static(publicDirectoryPath))
 
-const port = process.env.PORT || 3000
-
-let count = 0
 
 io.on('connection', (socket) => {
 	console.log("New Websocket Connection")
 
-	socket.emit('countUpdated', count)
-	socket.on('increment', () => {
-		count++
-		// socket.emit('countUpdated', count)
-		io.emit('countUpdated', count)
+	socket.emit('message', "Welcome to ChatVille")
+	socket.on('sendMessage', (data) => {
+		io.emit('message', data)
 	})
 })
 
